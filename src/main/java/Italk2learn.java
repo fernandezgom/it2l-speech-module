@@ -4,6 +4,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.italk2learn.util.TranscriptionSingleton;
 import com.italk2learn.vo.SpeechRecognitionRequestVO;
 
 public class Italk2learn {
@@ -20,19 +21,19 @@ public class Italk2learn {
     //JLF Indicates if ASREngine is initialised or no
     private boolean isInit=false;
     
-    private List<String> currentWords;
-    
+    private TranscriptionSingleton sone = null;
+    		
 	private static final Logger logger = LoggerFactory
 			.getLogger(Italk2learn.class);
 	
 	//JLF: Send chunks of audio to Speech Recognition engine
 	public List<String> sendNewChunk(SpeechRecognitionRequestVO request) {
-		System.out.println("sendNewChunk() ---Sending data from Java!");
+		System.out.println("sendNewChunk() ---Sending data from Java with instance: "+request.getInstance());
 		instanceNum=request.getInstance();
 		try {
-			List<String> aux= currentWords;
+			List<String> aux= new ArrayList<String>(TranscriptionSingleton.getInstance().getCurrentWords());
 			this.sendNewAudioChunk(request.getData());
-			currentWords.clear();
+			TranscriptionSingleton.getInstance().getCurrentWords().clear();
 			return aux;
 		} catch (Exception e) {
 			logger.error(e.toString());
@@ -42,15 +43,14 @@ public class Italk2learn {
 	}
 	
 	//JLF:Open the listener and retrieves true if the operation was right
-	public boolean initSpeechRecognition(int instance) {
-		System.out.println("initSpeechRecognition()---Open Listener from Java!");
+	public boolean initSpeechRecognition(Integer instance) {
+		System.out.println("initSpeechRecognition()---Open Listener from Java with instance: "+instance.toString());
 		instanceNum=instance;
 		boolean result=false;
-		currentWords= new ArrayList<String>();
+	    TranscriptionSingleton.getInstance();
 		try {
 			// JLF German Language de_de
 			result=this.initSpeechRecognitionEngine("localhost", instance, "en_ux", "base");
-			System.out.println("initSpeechRecognition()---");
 			isInit=result;
 			return result;
 		} catch (Exception e) {
@@ -62,13 +62,13 @@ public class Italk2learn {
 	}
 	
 	//JLF:Close the listener and retrieves the whole transcription
-	public String closeEngine(int instance) {
-		System.out.println("closeEngine()---Close Listener from Java!");
+	public String closeEngine(Integer instance) {
+		System.out.println("closeEngine()---Close Listener from Java with instance: "+instance.toString());
 		instanceNum=instance;
 		String result="";
 		try {
 			result=this.close();
-			System.out.println(result);
+			//System.out.println(result);
 			return result;
 		} catch (Exception e) {
 			logger.error(e.toString());
@@ -81,7 +81,7 @@ public class Italk2learn {
 	// JLF: Retrieves data from ASRResult on real time
 	public String realTimeSpeech(String text) {
 		logger.info(text);
-		currentWords.add(text);
+		TranscriptionSingleton.getInstance().getCurrentWords().add(text);
 		System.out.println("\nJava: "+text);
 	    return text;
 	}

@@ -1,7 +1,10 @@
 package com.italk2learn.bo;
 
+import java.io.File;
 import java.io.StringReader;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;

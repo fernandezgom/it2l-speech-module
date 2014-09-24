@@ -42,12 +42,12 @@ public class SpeechRecognitionController {
 	 */
 	@RequestMapping(value = "/sendData",method = RequestMethod.POST)
 	@ResponseBody
-	public SpeechRecognitionResponseVO sendData(@RequestBody byte[] body) {
+	public SpeechRecognitionResponseVO sendData(@RequestBody SpeechRecognitionRequestVO request) {
 		logger.info("JLF --- Speech Recognition Main Controller");
-		SpeechRecognitionRequestVO request= new SpeechRecognitionRequestVO();
-		request.setHeaderVO(new HeaderVO());
+		//SpeechRecognitionRequestVO request= new SpeechRecognitionRequestVO();
+		//request.setHeaderVO(new HeaderVO());
 		//request.getHeaderVO().setLoginUser(user.getUsername());
-		request.setData(body);
+		//request.setData(body);
 		try {
 			SpeechRecognitionResponseVO response= new SpeechRecognitionResponseVO();
 			response=((SpeechRecognitionResponseVO) getSpeechRecognitionService().sendNewAudioChunk(request));
