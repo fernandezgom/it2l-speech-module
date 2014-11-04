@@ -63,12 +63,16 @@ public class SpeechRecognitionController {
 	 */
 	@RequestMapping(value = "/initEngine",method = RequestMethod.GET)
 	@ResponseBody
-	public Boolean initASREngine(@RequestParam(value = "user") String user, @RequestParam(value = "instance") String instance) {
+	public Boolean initASREngine(@RequestParam(value = "user") String user, @RequestParam(value = "instance") String instance, 
+			@RequestParam(value = "server") String server, @RequestParam(value = "language") String language, @RequestParam(value = "model") String model) {
 		logger.info("JLF --- Speech Recognition Main Controller");
 		SpeechRecognitionRequestVO request= new SpeechRecognitionRequestVO();
 		request.setHeaderVO(new HeaderVO());
 		request.getHeaderVO().setLoginUser(user);
 		request.setInstance(Integer.parseInt(instance));
+		request.setServer(server);
+		request.setLanguage(language);
+		request.setModel(model);
 		try {
 			SpeechRecognitionResponseVO response= new SpeechRecognitionResponseVO();
 			response=((SpeechRecognitionResponseVO) getSpeechRecognitionService().initASREngine(request));

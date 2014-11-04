@@ -43,21 +43,21 @@ public class Italk2learn {
 	}
 	
 	//JLF:Open the listener and retrieves true if the operation was right
-	public boolean initSpeechRecognition(Integer instance) {
-		System.out.println("initSpeechRecognition()---Open Listener from Java with instance: "+instance.toString());
-		instanceNum=instance;
+	public boolean initSpeechRecognition(SpeechRecognitionRequestVO request) {
+		System.out.println("initSpeechRecognition()---Open Listener from Java with instance: "+request.getInstance());
+		instanceNum=request.getInstance();
 		boolean result=false;
 	    TranscriptionSingleton.getInstance();
 		try {
 			// JLF German Language de_de
-			result=this.initSpeechRecognitionEngine("localhost", instance, "en_ux", "base");
+			result=this.initSpeechRecognitionEngine(request.getServer(), request.getInstance(), request.getLanguage(), request.getModel());
 			isInit=result;
 			return result;
 		} catch (Exception e) {
 			logger.error(e.toString());
 			System.err.println(e);
 		} 
-		instanceNum=instance;
+		instanceNum=request.getInstance();
 		return result;
 	}
 	

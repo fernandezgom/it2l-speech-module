@@ -50,8 +50,8 @@ public class SpeechRecognitionBO implements ISpeechRecognitionBO {
 		try {
 			if (isInit==false) {
 				asrClass = Class.forName("Italk2learn");
-				asrMethod = asrClass.getMethod("initSpeechRecognition", new Class[] { Integer.class });
-				isInit = (Boolean)asrMethod.invoke(asrClass.newInstance(),new Integer[] { request.getInstance()});
+				asrMethod = asrClass.getMethod("initSpeechRecognition", new Class[] { SpeechRecognitionRequestVO.class });
+				isInit = (Boolean)asrMethod.invoke(asrClass.newInstance(),new SpeechRecognitionRequestVO[] { request});
 				res.setOpen(isInit);
 				logger.debug("initASREngine()--- ASREngine initialised");
 			} else {
