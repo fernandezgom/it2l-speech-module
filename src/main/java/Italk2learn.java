@@ -28,7 +28,7 @@ public class Italk2learn {
 	
 	//JLF: Send chunks of audio to Speech Recognition engine
 	public List<String> sendNewChunk(SpeechRecognitionRequestVO request) {
-		System.out.println("sendNewChunk() ---Sending data from Java with instance: "+request.getInstance());
+		System.out.println("sendNewChunk() ---Sending data from Java with instance: "+request.getInstance()+" by user="+ request.getHeaderVO().getLoginUser() +" and semaphore="+TranscriptionSingleton.getInstance().getCounter());
 		instanceNum=request.getInstance();
 		try {
 			List<String> aux= new ArrayList<String>(TranscriptionSingleton.getInstance().getCurrentWords());
@@ -44,7 +44,7 @@ public class Italk2learn {
 	
 	//JLF:Open the listener and retrieves true if the operation was right
 	public boolean initSpeechRecognition(SpeechRecognitionRequestVO request) {
-		System.out.println("initSpeechRecognition()---Open Listener from Java with instance: "+request.getInstance());
+		System.out.println("initSpeechRecognition()---Open Listener from Java with instance: "+request.getInstance()+" by user="+ request.getHeaderVO().getLoginUser());
 		instanceNum=request.getInstance();
 		boolean result=false;
 	    TranscriptionSingleton.getInstance();
@@ -81,6 +81,11 @@ public class Italk2learn {
 	// JLF: Retrieves data from ASRResult on real time
 	public String realTimeSpeech(String text) {
 		logger.info(text);
+		if (TranscriptionSingleton.getInstance().getCounter()<=0) {
+			TranscriptionSingleton.getInstance().setCounter(0);
+		} else {
+			TranscriptionSingleton.getInstance().setCounter(TranscriptionSingleton.getInstance().getCounter()-1);
+		}
 		TranscriptionSingleton.getInstance().getCurrentWords().add(text);
 		System.out.println("\nJava: "+text);
 	    return text;

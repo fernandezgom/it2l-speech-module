@@ -1,10 +1,7 @@
 package com.italk2learn.bo;
 
-import java.io.File;
 import java.io.StringReader;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,6 +19,7 @@ import org.xml.sax.InputSource;
 
 import com.italk2learn.bo.inter.ISpeechRecognitionBO;
 import com.italk2learn.exception.ITalk2LearnException;
+import com.italk2learn.util.TranscriptionSingleton;
 import com.italk2learn.vo.SpeechRecognitionRequestVO;
 import com.italk2learn.vo.SpeechRecognitionResponseVO;
 
@@ -101,7 +99,8 @@ public class SpeechRecognitionBO implements ISpeechRecognitionBO {
 		logger.debug("sendNewAudioChunk()--- Sending new audio chunk");
 		SpeechRecognitionResponseVO res=new SpeechRecognitionResponseVO();
 		try {
-			if (isInit==true) {
+			if (isInit==true && (TranscriptionSingleton.getInstance().getCounter()<=12)) {
+				TranscriptionSingleton.getInstance().setCounter(TranscriptionSingleton.getInstance().getCounter()+1);
 				asrMethod = asrClass.getMethod("sendNewChunk", new Class[] { SpeechRecognitionRequestVO.class });
 				List<String> asrReturned= (List<String>)asrMethod.invoke(asrClass.newInstance(),new SpeechRecognitionRequestVO[] { request});
 				res.setLiveResponse(asrReturned);

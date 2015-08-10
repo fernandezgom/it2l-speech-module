@@ -7,6 +7,7 @@ public class TranscriptionSingleton {
 	private static TranscriptionSingleton instance = null;
 
 	private List<String> currentWords=new ArrayList<String>();
+	private int counter=0;
 
 	protected TranscriptionSingleton() {
 		// Exists only to defeat instantiation.
@@ -25,5 +26,13 @@ public class TranscriptionSingleton {
 
 	public void setCurrentWords(List<String> currentWords) {
 		this.currentWords = currentWords;
+	}
+
+	public int getCounter() {
+		return counter;
+	}
+
+	public void setCounter(int counter) {
+		this.counter = counter;
 	}
 }

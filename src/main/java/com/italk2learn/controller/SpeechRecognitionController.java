@@ -1,7 +1,5 @@
 package com.italk2learn.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +42,6 @@ public class SpeechRecognitionController {
 	@ResponseBody
 	public SpeechRecognitionResponseVO sendData(@RequestBody SpeechRecognitionRequestVO request) {
 		logger.info("JLF --- Speech Recognition Main Controller");
-		//SpeechRecognitionRequestVO request= new SpeechRecognitionRequestVO();
-		//request.setHeaderVO(new HeaderVO());
-		//request.getHeaderVO().setLoginUser(user.getUsername());
-		//request.setData(body);
 		try {
 			SpeechRecognitionResponseVO response= new SpeechRecognitionResponseVO();
 			response=((SpeechRecognitionResponseVO) getSpeechRecognitionService().sendNewAudioChunk(request));
