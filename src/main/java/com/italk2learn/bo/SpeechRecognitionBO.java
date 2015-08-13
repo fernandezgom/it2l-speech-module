@@ -47,6 +47,7 @@ public class SpeechRecognitionBO implements ISpeechRecognitionBO {
 		//We have the user and also the instance
 		try {
 			if (isInit==false) {
+				TranscriptionSingleton.getInstance().setCounter(0);
 				asrClass = Class.forName("Italk2learn");
 				asrMethod = asrClass.getMethod("initSpeechRecognition", new Class[] { SpeechRecognitionRequestVO.class });
 				isInit = (Boolean)asrMethod.invoke(asrClass.newInstance(),new SpeechRecognitionRequestVO[] { request});
@@ -106,8 +107,14 @@ public class SpeechRecognitionBO implements ISpeechRecognitionBO {
 				res.setLiveResponse(asrReturned);
 				logger.debug("sendNewAudioChunk()--- Audio chunk sent");
 			} else {
-				logger.debug("sendNewAudioChunk()--- ASR Engine not initialised");
-				System.out.println("sendNewAudioChunk()--- ASR Engine not initialised");
+				if (TranscriptionSingleton.getInstance().getCounter()>12) {
+					logger.debug("sendNewAudioChunk()--- Semaphore is blocking sending new chunks");
+					System.out.println("Send new chunk is bloked because Speech module semaphore is blocking sending more chunks since it is not receiving info from ASREngine");
+					System.out.println("This can be due webbrowser is not sending audio or ASREngine is frozen");
+				} else {
+					logger.debug("sendNewAudioChunk()--- ASR Engine not initialised");
+					System.out.println("sendNewAudioChunk()--- ASR Engine not initialised");
+				}
 			}	
 			return res;
 		} catch (Exception e) {
